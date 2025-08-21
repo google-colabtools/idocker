@@ -1,0 +1,37 @@
+name: Build Debian e Push para GHCR
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout do código
+        uses: actions/checkout@v3
+
+      - name: 🐳 Login no GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🔧 Build da imagem com tag
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository }}
+          # Transforma o nome do repo para minúsculas
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          
+          # Usa o SHA do commit como tag para um controle de versão único
+          docker build -t $IMAGE_ID:latest -t $IMAGE_ID:${{ github.sha }} -f DockerfileDebian .
+
+      - name: 🚀 Push da imagem para o GHCR
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository }}
+          # Transforma o nome do repo para minúsculas
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
+          docker push $IMAGE_ID:latest
+          docker push $IMAGE_ID:${{ github.sha }}
