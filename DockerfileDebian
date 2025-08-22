@@ -1,4 +1,4 @@
-FROM debian:stable-slim
+FROM debian:bullseye-slim
 
 # Set default environment variables
 ENV DEBIAN_FRONTEND=noninteractive
@@ -162,4 +162,3 @@ ENTRYPOINT ["/home/user/app/entrypoint.sh"]
 # Define the command to run your application with cron optionally
 CMD ["sh", "-c", "nohup gunicorn keep_running:app --bind 0.0.0.0:7860 & \
     if [ \"$RUN_ON_START\" = \"true\" ]; then bash runner_daily.sh >/proc/1/fd/1 2>/proc/1/fd/2; fi"]
-
