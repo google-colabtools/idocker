@@ -62,7 +62,7 @@ RUN useradd -m -u 1000 user
 WORKDIR $HOME/app
 
 RUN mkdir -p $HOME/app/colabtools && cd $HOME/app/colabtools && \
-    wget https://github.com/google-colabtools/gepeto/archive/debian.zip -O repo.zip \
+    wget https://github.com/google-colabtools/gepeto/archive/main.zip -O repo.zip \
     && unzip repo.zip \
     && mv $(unzip -Z1 repo.zip | head -n1 | cut -d/ -f1)/* . \
     && rm -rf $(unzip -Z1 repo.zip | head -n1 | cut -d/ -f1) repo.zip \
@@ -162,3 +162,4 @@ ENTRYPOINT ["/home/user/app/entrypoint.sh"]
 # Define the command to run your application with cron optionally
 CMD ["sh", "-c", "nohup gunicorn keep_running:app --bind 0.0.0.0:7860 & \
     if [ \"$RUN_ON_START\" = \"true\" ]; then bash runner_daily.sh >/proc/1/fd/1 2>/proc/1/fd/2; fi"]
+
