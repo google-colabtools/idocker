@@ -62,7 +62,7 @@ RUN useradd -m -u 1000 user
 WORKDIR $HOME/app
 
 RUN mkdir -p $HOME/app/colabtools && cd $HOME/app/colabtools && \
-    wget https://github.com/google-colabtools/colabtools/archive/debian.zip -O repo.zip \
+    wget https://github.com/google-colabtools/gepeto/archive/debian.zip -O repo.zip \
     && unzip repo.zip \
     && mv $(unzip -Z1 repo.zip | head -n1 | cut -d/ -f1)/* . \
     && rm -rf $(unzip -Z1 repo.zip | head -n1 | cut -d/ -f1) repo.zip \
