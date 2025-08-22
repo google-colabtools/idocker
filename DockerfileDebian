@@ -15,10 +15,9 @@ ENV HOME=/home/user
 
 RUN apt-get update -y && \
     apt-get install -yq \
-        tar wget xvfb jq gnupg2 curl git unzip squid-openssl dnsutils netcat-openbsd tzdata locales dbus \
-        fonts-liberation wayland-protocols libwayland-client0 libwayland-cursor0 libwayland-server0 libwayland-egl1 \
-        sway seatd libappindicator3-1 libffi-dev zlib1g-dev liblzma-dev libbz2-dev libreadline-dev libsqlite3-dev \
-        libnss3 libxss1 libatk-bridge2.0-0 libgtk-3-0 libgbm-dev \
+        tar wget jq gnupg2 curl git unzip squid-openssl dnsutils netcat-openbsd tzdata locales \
+        libffi-dev zlib1g-dev liblzma-dev libbz2-dev libreadline-dev libsqlite3-dev \
+        libnss3 libgbm-dev \
         python3 python3-pip python3-venv gunicorn3 \
         python3-flask dos2unix
 
@@ -67,7 +66,7 @@ RUN mkdir -p $HOME/app/colabtools && cd $HOME/app/colabtools && \
     && unzip repo.zip \
     && mv $(unzip -Z1 repo.zip | head -n1 | cut -d/ -f1)/* . \
     && rm -rf $(unzip -Z1 repo.zip | head -n1 | cut -d/ -f1) repo.zip \
-    && mv entrypoint.sh run_daily.sh keep_service.py run.py rwd_functions.py requirements.txt $HOME/app/ \
+    && mv entrypoint.sh runner_daily.sh keep_running.py runner.py rwds_functions.py requirements.txt $HOME/app/ \
     && mkdir -p $HOME/.npm \
     && chown -R 1000:1000 $HOME/.npm \
     && npm install \
@@ -122,47 +121,18 @@ RUN squid -Nz
 # Exponha a porta do proxy
 EXPOSE 3128
 
-# Set up environment variables for Wayland and Chrome
+# Set up environment variables for Chrome headless
 ENV HOME=/home/user \
-    XDG_RUNTIME_DIR=/tmp/runtime-user \
-    WAYLAND_DISPLAY=wayland-1 \
-    MOZ_ENABLE_WAYLAND=1 \
-    CHROME_ENABLE_WAYLAND=1 \
-    WLR_BACKENDS=headless \
-    WLR_RENDERER=pixman \
-    WLR_LIBINPUT_NO_DEVICES=1 \
-    WLR_DRM_NO_ATOMIC=1 \
-    BROWSER_FULLSCREEN=1 \
-    WLR_DRM_DEVICES=/dev/dri/card0 \
-    SWAYSOCK=/tmp/runtime-user/sway-ipc.sock \
     CHROME_USER_DATA_DIR=/home/user/.config/chrome \
     NO_AT_BRIDGE=1 \
     VIRTUAL_ENV=/home/user/.venv
 
 
-# Set up directories with proper permissions
-RUN mkdir -p /home/user/.config/sway \
-    && mkdir -p /home/user/.config/chrome \
+# Set up directories for Chrome headless
+RUN mkdir -p /home/user/.config/chrome \
     && mkdir -p /home/user/.cache/chrome \
-    && chmod -R 0755 /home/user \
-    && chmod -R 0700 /home/user/.config/chrome \
-    && chmod -R 0700 /home/user/.cache/chrome \
     && chown -R user:user /home/user
 
-# Create sway config with minimal setup
-RUN printf '%s\n' \
-    'output HEADLESS-1 resolution 1920x1080 position 0,0' \
-    'output * bg #000000 solid_color' \
-    'xwayland disable' \
-    'for_window [app_id=".*"] floating enable' \
-    'for_window [app_id=".*"] border normal' \
-    'for_window [app_id=".*"] resize set 100 ppt 100 ppt' \
-    'for_window [class="Google-chrome"] {' \
-    '    border normal' \
-    '    inhibit_idle focus' \
-    '}' > /home/user/.config/sway/config && \
-    chown -R user:user /home/user/.config
-    
 RUN chown -R user:user $HOME
 # --- MODIFIED SECTION FOR VIRTUAL ENVIRONMENT ---
 # Create a virtual environment
@@ -181,14 +151,14 @@ COPY --chown=user . $HOME/app
 RUN chown -R user:user /home/user/app
 RUN ls
 RUN dos2unix entrypoint.sh
-RUN dos2unix run_daily.sh
+RUN dos2unix runner_daily.sh
 RUN chmod +x entrypoint.sh
-RUN chmod +x run_daily.sh
+RUN chmod +x runner_daily.sh
 
 # Set the entrypoint to our entrypoint.sh
 
 ENTRYPOINT ["/home/user/app/entrypoint.sh"]
 
 # Define the command to run your application with cron optionally
-CMD ["sh", "-c", "nohup gunicorn keep_service:app --bind 0.0.0.0:7860 & \
-    if [ \"$RUN_ON_START\" = \"true\" ]; then bash run_daily.sh >/proc/1/fd/1 2>/proc/1/fd/2; fi"]
+CMD ["sh", "-c", "nohup gunicorn keep_running:app --bind 0.0.0.0:7860 & \
+    if [ \"$RUN_ON_START\" = \"true\" ]; then bash runner_daily.sh >/proc/1/fd/1 2>/proc/1/fd/2; fi"]
