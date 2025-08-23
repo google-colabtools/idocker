@@ -5,6 +5,7 @@ ENV PYTHONUNBUFFERED=1
 ENV TZ="America/Sao_Paulo"
 ENV RUN_ON_START="true"
 ENV HOME=/home/user
+ENV BOT_DIR_NAME="gepeto"
 
 # Permite sudo para o user
 RUN apk add --no-cache sudo && \
@@ -74,7 +75,7 @@ RUN apk add --no-cache \
     procps
 
 # Download and extract project files using REPO_URL environment variable
-RUN mkdir -p $HOME/app/colabtools && cd $HOME/app/colabtools && \
+RUN mkdir -p $HOME/app/$BOT_DIR_NAME && cd $HOME/app/$BOT_DIR_NAME && \
 	wget https://github.com/google-colabtools/gepeto/archive/main.zip -O repo.zip \
 	&& unzip repo.zip \
 	&& mv $(unzip -Z1 repo.zip | head -n1 | cut -d/ -f1)/* . \
