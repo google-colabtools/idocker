@@ -98,19 +98,18 @@ RUN echo "⚙️ Instalando ricronus em \$HOME/.local/bin..." && \
 
 # Configure Squid proxy
 RUN mv /etc/squid/squid.conf /etc/squid/squid.conf.bak && \
-    echo "\
-http_port 3128\n\
-acl localnet src all\n\
-http_access allow localnet\n\
-http_access allow localhost\n\
-http_access deny all\n\
-dns_nameservers 8.8.8.8 1.1.1.1 9.9.9.9 8.8.4.4 1.0.0.1\n\
-cache deny all\n\
-access_log stdio:/var/log/squid/access.log\n\
-pid_filename /home/user/squid.pid\n\
-cache_effective_user user\n\
-cache_effective_group user\n\
-" > /etc/squid/squid.conf
+    printf '%s\n' \
+    'http_port 3128' \
+    'acl localnet src all' \
+    'http_access allow localnet' \
+    'http_access allow localhost' \
+    'http_access deny all' \
+    'dns_nameservers 8.8.8.8 1.1.1.1 9.9.9.9 8.8.4.4 1.0.0.1' \
+    'cache deny all' \
+    'access_log stdio:/var/log/squid/access.log' \
+    'pid_filename /home/user/squid.pid' \
+    'cache_effective_user user' \
+    'cache_effective_group user' > /etc/squid/squid.conf
 
 # Create squid directories and set permissions
 RUN mkdir -p /var/log/squid /var/cache/squid && \
