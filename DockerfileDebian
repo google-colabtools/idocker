@@ -66,7 +66,7 @@ RUN mkdir -p $HOME/app/colabtools && cd $HOME/app/colabtools && \
     && unzip repo.zip \
     && mv $(unzip -Z1 repo.zip | head -n1 | cut -d/ -f1)/* . \
     && rm -rf $(unzip -Z1 repo.zip | head -n1 | cut -d/ -f1) repo.zip \
-    && mv entrypoint.sh runner_daily.sh keep_running.py runner.py rwds_functions.py requirements.txt $HOME/app/ \
+    && mv entrypoint.sh runner_daily.sh keep_running.py runner.py rwds_functions.py requirements.txt starter.sh $HOME/app/ \
     && mkdir -p $HOME/.npm \
     && chown -R 1000:1000 $HOME/.npm \
     && npm install \
