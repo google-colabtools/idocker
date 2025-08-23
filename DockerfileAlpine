@@ -161,7 +161,9 @@ COPY --chown=user . $HOME/app
 RUN ls
 RUN dos2unix entrypoint.sh
 RUN dos2unix runner_daily.sh
+RUN dos2unix starter.sh
 RUN chmod +x entrypoint.sh
+RUN chmod +x starter.sh
 RUN chmod +x runner_daily.sh
 
 ENTRYPOINT ["/home/user/app/entrypoint.sh"]
