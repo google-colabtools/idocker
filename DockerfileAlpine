@@ -70,7 +70,8 @@ RUN apk add --no-cache \
     dos2unix \
     squid \
     bind-tools \
-    netcat-openbsd
+    netcat-openbsd \
+    procps
 
 # Download and extract project files using REPO_URL environment variable
 RUN mkdir -p $HOME/app/colabtools && cd $HOME/app/colabtools && \
@@ -159,12 +160,12 @@ USER user
 COPY --chown=user . $HOME/app
 RUN ls
 RUN dos2unix entrypoint.sh
-RUN dos2unix run_daily.sh
+RUN dos2unix runner_daily.sh
 RUN chmod +x entrypoint.sh
-RUN chmod +x run_daily.sh
+RUN chmod +x runner_daily.sh
 
 ENTRYPOINT ["/home/user/app/entrypoint.sh"]
 
 # Run the application
-CMD ["sh", "-c", "nohup gunicorn keep_service:app --bind 0.0.0.0:7860 & \
-    if [ \"$RUN_ON_START\" = \"true\" ]; then bash run_daily.sh >/proc/1/fd/1 2>/proc/1/fd/2; fi"]
+CMD ["sh", "-c", "nohup gunicorn keep_running:app --bind 0.0.0.0:7860 & \
+    if [ \"$RUN_ON_START\" = \"true\" ]; then bash runner_daily.sh >/proc/1/fd/1 2>/proc/1/fd/2; fi"]
