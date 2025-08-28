@@ -1,4 +1,4 @@
-name: Build Docker Rewards - Alpine
+name: Build Docker MultiDL
 
 on:
   # 1. Gatilho para execução manual a partir da aba "Actions"
