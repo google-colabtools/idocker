@@ -52,10 +52,10 @@ ENV PATH="/home/user/.local/bin:/home/user/app/venv/bin:/usr/local/bin:/usr/bin:
 ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 ENV PLAYWRIGHT_BROWSERS_PATH=1
 ENV THORIUM_BIN_DISABLED=/usr/bin/thorium-browser
-#ENV CHROME_BIN=/usr/bin/google-chrome
-ENV CHROME_BIN=/usr/bin/microsoft-edge
+ENV CHROME_BIN=/usr/bin/google-chrome
 ENV CHROME_PATH=/usr/lib/google-chrome/
 ENV EDGE_BIN=/usr/bin/microsoft-edge
+ENV EDGE_ENABLED=1
 
 # Create user if it doesn't exist, or use existing one
 RUN id -u user >/dev/null 2>&1 || useradd -m -u 1010 user
