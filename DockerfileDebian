@@ -56,7 +56,9 @@ ENV THORIUM_BIN_DISABLED=/usr/bin/thorium-browser
 ENV CHROME_BIN=/usr/bin/microsoft-edge
 ENV CHROME_PATH=/usr/lib/google-chrome/
 ENV EDGE_BIN=/usr/bin/microsoft-edge
-RUN useradd -m -u 1000 user
+
+# Create user if it doesn't exist, or use existing one
+RUN id -u user >/dev/null 2>&1 || useradd -m -u 1010 user
 
 WORKDIR $HOME/app
 
