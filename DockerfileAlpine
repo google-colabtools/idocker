@@ -1,7 +1,7 @@
 FROM alpine:latest
 
 # Set default environment variables
-ENV ALPINE=1
+ENV ALPINE=0
 ENV PYTHONUNBUFFERED=1
 ENV TZ="America/Sao_Paulo"
 ENV RUN_ON_START="true"
@@ -27,7 +27,6 @@ ENV HOME=/home/user \
     SYSTEM=spaces \
 	CHROME_BIN=/usr/bin/chromium-browser \
     CHROME_PATH=/usr/lib/chromium/ \
-	PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 \
 	PLAYWRIGHT_BROWSERS_PATH=$HOME/app/browsers \
 	VIRTUAL_ENV=/app/.venv
 
