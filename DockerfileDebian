@@ -62,14 +62,13 @@ RUN id -u user >/dev/null 2>&1 || useradd -m -u 1010 user
 
 WORKDIR $HOME/app
 
+# Download and extract project files using REPO_URL environment variable
 RUN mkdir -p $HOME/app/$BOT_DIR_NAME && cd $HOME/app/$BOT_DIR_NAME && \
-    wget https://github.com/google-colabtools/gepeto/archive/main.zip -O repo.zip \
-    && unzip repo.zip \
-    && mv $(unzip -Z1 repo.zip | head -n1 | cut -d/ -f1)/* . \
-    && rm -rf $(unzip -Z1 repo.zip | head -n1 | cut -d/ -f1) repo.zip \
+	wget https://github.com/google-colabtools/gepeto/archive/main.zip -O repo.zip \
+	&& unzip repo.zip \
+	&& mv $(unzip -Z1 repo.zip | head -n1 | cut -d/ -f1)/* . \
+	&& rm -rf $(unzip -Z1 repo.zip | head -n1 | cut -d/ -f1) repo.zip \
     && mv entrypoint.sh runner_daily.sh keep_running.py runner.py rwds_functions.py requirements.txt starter.sh $HOME/app/ \
-    && mkdir -p $HOME/.npm \
-    && chown -R 1000:1000 $HOME/.npm \
     && npm install \
     && npx playwright install \
     && npm install -g typescript
@@ -155,7 +154,7 @@ RUN dos2unix entrypoint.sh
 RUN dos2unix runner_daily.sh
 RUN chmod +x entrypoint.sh
 RUN chmod +x runner_daily.sh
-
+RUN ls
 # Set the entrypoint to our entrypoint.sh
 
 ENTRYPOINT ["/home/user/app/entrypoint.sh"]
