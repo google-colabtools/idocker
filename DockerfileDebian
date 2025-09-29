@@ -17,7 +17,7 @@ ENV HOME=/home/user
 
 RUN apt-get update -y && \
     apt-get install -yq \
-        tar wget jq gnupg2 curl git unzip squid-openssl dnsutils netcat-openbsd tzdata locales pkill \
+        tar wget jq gnupg2 curl git unzip squid-openssl dnsutils netcat-openbsd tzdata locales procps \
         libffi-dev zlib1g-dev liblzma-dev libbz2-dev libreadline-dev libsqlite3-dev \
         libnss3 libgbm-dev \
         python3 python3-pip python3-venv gunicorn3 \
