@@ -1,16 +1,17 @@
-FROM debian:bullseye-slim
+FROM ubuntu:latest
 
 # Set default environment variables
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ="America/Sao_Paulo"
 ENV PYTHONUNBUFFERED=1
 ENV RUN_ON_START="true"
-ENV CRON_START_TIME="0 5,11 * * *"
 ENV BOT_DIR_NAME="colabtools"
 #ARG CHROME_VERSION="128.0.6613.119-1"
 ARG CHROME_VERSION="138.0.7204.157-1"
 #ARG CHROME_LINK="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
 ARG CHROME_LINK="https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}_amd64.deb"
+ARG EDGE_VERSION="140.0.3485.94-1"
+ARG EDGE_LINK="https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_${EDGE_VERSION}_amd64.deb"
 
 ENV HOME=/home/user
 
@@ -30,6 +31,11 @@ RUN wget -q -O /tmp/chrome.deb ${CHROME_LINK} && \
 	rm /tmp/chrome.deb && \
 	google-chrome --version
 
+RUN wget -q -O /tmp/edge.deb ${EDGE_LINK} && \
+	apt-get install -y --no-install-recommends /tmp/edge.deb && \
+	rm /tmp/edge.deb && \
+	microsoft-edge --version
+
 RUN mkdir -p /root/.config/thorium/Crash\ Reports/pending/ && \
     mkdir -p $HOME/.local/bin/thorium-browser && \
     wget -O /tmp/thorium-avx2.zip "https://github.com/Alex313031/thorium/releases/download/M130.0.6723.174/thorium-browser_130.0.6723.174_AVX2.zip" && \
@@ -41,23 +47,15 @@ RUN mkdir -p /root/.config/thorium/Crash\ Reports/pending/ && \
 # Teste se o Thorium está instalado corretamente
 RUN thorium-browser --version || echo "Thorium não instalado corretamente"
 
-# Latest releases available at https://github.com/aptible/supercronic/releases
-ENV SUPERCRONIC_URL=https://github.com/aptible/supercronic/releases/download/v0.2.33/supercronic-linux-amd64 \
-    SUPERCRONIC_SHA1SUM=71b0d58cc53f6bd72cf2f293e09e294b79c666d8 \
-    SUPERCRONIC=supercronic-linux-amd64
-
-RUN curl -fsSLO "$SUPERCRONIC_URL" \
- && echo "${SUPERCRONIC_SHA1SUM}  ${SUPERCRONIC}" | sha1sum -c - \
- && chmod +x "$SUPERCRONIC" \
- && mv "$SUPERCRONIC" "/usr/local/bin/${SUPERCRONIC}" \
- && ln -s "/usr/local/bin/${SUPERCRONIC}" /usr/local/bin/supercronic
-
+# Set environment variables
 ENV PATH="/home/user/.local/bin:/home/user/app/venv/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:${PATH}"
 ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 ENV PLAYWRIGHT_BROWSERS_PATH=1
 ENV THORIUM_BIN_DISABLED=/usr/bin/thorium-browser
-ENV CHROME_BIN=/usr/bin/google-chrome
+#ENV CHROME_BIN=/usr/bin/google-chrome
+ENV CHROME_BIN=/usr/bin/microsoft-edge
 ENV CHROME_PATH=/usr/lib/google-chrome/
+ENV EDGE_BIN=/usr/bin/microsoft-edge
 RUN useradd -m -u 1000 user
 
 WORKDIR $HOME/app
