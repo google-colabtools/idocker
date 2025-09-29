@@ -1,6 +1,7 @@
 FROM alpine:latest
 
 # Set default environment variables
+ENV ALPINE=1
 ENV PYTHONUNBUFFERED=1
 ENV TZ="America/Sao_Paulo"
 ENV RUN_ON_START="true"
@@ -24,11 +25,10 @@ ENV HOME=/home/user \
     GRADIO_SERVER_NAME=0.0.0.0 \
     GRADIO_THEME=huggingface \
     SYSTEM=spaces \
-	THORIUM_BIN_DISABLED=/usr/bin/thorium-browser \
 	CHROME_BIN=/usr/bin/chromium-browser \
     CHROME_PATH=/usr/lib/chromium/ \
 	PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 \
-	PLAYWRIGHT_BROWSERS_PATH=1 \
+	PLAYWRIGHT_BROWSERS_PATH=$HOME/app/browsers \
 	VIRTUAL_ENV=/app/.venv
 
 # Install essential packages
@@ -123,17 +123,6 @@ RUN squid -Nz
 
 # Expose proxy port
 EXPOSE 3128
-
-# Latest releases available at https://github.com/aptible/supercronic/releases
-ENV SUPERCRONIC_URL=https://github.com/aptible/supercronic/releases/download/v0.2.33/supercronic-linux-amd64 \
-    SUPERCRONIC_SHA1SUM=71b0d58cc53f6bd72cf2f293e09e294b79c666d8 \
-    SUPERCRONIC=supercronic-linux-amd64
-
-RUN curl -fsSLO "$SUPERCRONIC_URL" \
- && echo "${SUPERCRONIC_SHA1SUM}  ${SUPERCRONIC}" | sha1sum -c - \
- && chmod +x "$SUPERCRONIC" \
- && mv "$SUPERCRONIC" "/usr/local/bin/${SUPERCRONIC}" \
- && ln -s "/usr/local/bin/${SUPERCRONIC}" /usr/local/bin/supercronic
 
 # Set up timezone
 RUN cp /usr/share/zoneinfo/${TZ} /etc/localtime && \
