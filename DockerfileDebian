@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu:24.04
 
 # Set default environment variables
 ENV DEBIAN_FRONTEND=noninteractive
@@ -12,39 +12,27 @@ ARG EDGE_LINK="https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-e
 
 ENV HOME=/home/user
 
+# Install base system packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    tar wget jq gnupg2 curl git unzip squid-openssl dnsutils netcat-openbsd tzdata locales procps \
+    tar wget jq gnupg2 curl git unzip dnsutils netcat-openbsd tzdata locales procps \
     libffi-dev zlib1g-dev liblzma-dev libbz2-dev libreadline-dev libsqlite3-dev \
-    libnss3 libgbm-dev \
-    python3 python3-pip python3-venv gunicorn3 \
-    python3-flask dos2unix \
+    python3 python3-pip python3-venv python3-flask dos2unix \
     ca-certificates \
-    libglib2.0-0 \
-    libdbus-1-3 \
-    libexpat1 \
-    libfontconfig1 \
-    libgtk-3-0 \
-    libnspr4 \
-    libasound2 \
-    libflac8 \
-    libatk1.0-0 \
-    libatspi2.0-0 \
-    libdrm2 \
-    libgbm1 \
-    libdav1d7 \
-    libx11-6 \
-    libx11-xcb1 \
-    libxcomposite1 \
-    libxcursor1 \
-    libxdamage1 \
-    libxext6 \
-    libxfixes3 \
-    libxi6 \
-    libxrandr2 \
-    libxrender1 \
-    libxss1 \
-    libxtst6 \
-    libdouble-conversion3 \
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
+
+# Install Squid proxy separately (may not be available as squid-openssl in Ubuntu 24.04)
+RUN apt-get update && apt-get install -y --no-install-recommends squid \
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
+
+# Install GUI/browser dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libnss3 libgbm-dev \
+    libglib2.0-0 libdbus-1-3 libexpat1 libfontconfig1 \
+    libgtk-3-0 libnspr4 libasound2 \
+    libatk1.0-0 libatspi2.0-0 libdrm2 libgbm1 \
+    libx11-6 libx11-xcb1 libxcomposite1 libxcursor1 \
+    libxdamage1 libxext6 libxfixes3 libxi6 \
+    libxrandr2 libxrender1 libxss1 libxtst6 \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
