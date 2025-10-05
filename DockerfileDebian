@@ -149,9 +149,9 @@ RUN mv /etc/squid/squid.conf /etc/squid/squid.conf.bak && \
     'http_access deny all' \
     'dns_nameservers 8.8.8.8 1.1.1.1 9.9.9.9 8.8.4.4 1.0.0.1' \
     'cache deny all' \
-    'access_log stdio:/home/user/squid-access.log' \
-    'cache_log /home/user/squid-cache.log' \
-    'pid_filename /home/user/squid.pid' \
+    'access_log stdio:/home/user/app/squid/squid-access.log' \
+    'cache_log /home/user/app/squid/squid-cache.log' \
+    'pid_filename /home/user/app/squid/squid.pid' \
     'cache_effective_user user' \
     'cache_effective_group user' > /etc/squid/squid.conf
 
@@ -159,9 +159,9 @@ RUN mv /etc/squid/squid.conf /etc/squid/squid.conf.bak && \
 RUN mkdir -p /home/user && chown -R user:user /home/user
 
 # Create squid log files in user's home directory and set permissions
-RUN touch /home/user/squid-access.log /home/user/squid-cache.log && \
-    chown user:user /home/user/squid-access.log /home/user/squid-cache.log && \
-    chmod 644 /home/user/squid-access.log /home/user/squid-cache.log
+RUN touch /home/user/app/squid/squid-access.log /home/user/app/squid/squid-cache.log && \
+    chown user:user /home/user/app/squid/squid-access.log /home/user/app/squid/squid-cache.log && \
+    chmod 644 /home/user/app/squid/squid-access.log /home/user/app/squid/squid-cache.log
 
 # Initialize squid cache with default settings
 RUN squid -Nz
