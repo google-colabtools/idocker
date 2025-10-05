@@ -48,10 +48,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libgtk-3-0 \
     libnspr4 \
     libasound2 \
+    libflac12 \
     libatk1.0-0 \
     libatspi2.0-0 \
     libdrm2 \
     libgbm1 \
+    libdav1d6 \
     libx11-6 \
     libx11-xcb1 \
     libxcomposite1 \
@@ -64,6 +66,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxrender1 \
     libxss1 \
     libxtst6 \
+    libdouble-conversion3 \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
