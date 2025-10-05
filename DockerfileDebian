@@ -166,7 +166,7 @@ RUN mkdir -p /var/log/squid /var/spool/squid /home/user && \
     chmod 644 /home/user/squid.pid
 
 # Initialize squid cache as user
-RUN su - user -c "squid -Nz"
+RUN su user -c "/usr/sbin/squid -Nz"
 
 # Exponha a porta do proxy
 EXPOSE 3128
