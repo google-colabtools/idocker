@@ -159,8 +159,9 @@ RUN mv /etc/squid/squid.conf /etc/squid/squid.conf.bak && \
 RUN mkdir -p /home/user && chown -R user:user /home/user
 
 # Create squid log files in user's home directory and set permissions
-RUN touch /home/user/app/squid/squid-access.log /home/user/app/squid/squid-cache.log && \
-    chown user:user /home/user/app/squid/squid-access.log /home/user/app/squid/squid-cache.log && \
+RUN mkdir -p /home/user/app/squid && \
+    touch /home/user/app/squid/squid-access.log /home/user/app/squid/squid-cache.log && \
+    chown -R user:user /home/user/app/squid && \
     chmod 644 /home/user/app/squid/squid-access.log /home/user/app/squid/squid-cache.log
 
 # Initialize squid cache with default settings
