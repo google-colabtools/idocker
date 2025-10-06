@@ -7,7 +7,7 @@ ENV PYTHONUNBUFFERED=1
 ENV RUN_ON_START="true"
 ENV BOT_DIR_NAME="gepeto-v2"
 ARG CHROME_LINK="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
-ARG EDGE_VERSION="140.0.3485.94-1"
+ARG EDGE_VERSION="141.0.3537.57-1"
 ARG EDGE_LINK="https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_${EDGE_VERSION}_amd64.deb"
 
 ENV HOME=/home/user
@@ -77,10 +77,10 @@ RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
 #	rm /tmp/chrome.deb && \
 #	google-chrome --version
 
-#RUN wget -q -O /tmp/edge.deb ${EDGE_LINK} && \
-#	apt-get install -y --no-install-recommends /tmp/edge.deb && \
-#	rm /tmp/edge.deb && \
-#	microsoft-edge --version
+RUN wget -q -O /tmp/edge.deb ${EDGE_LINK} && \
+	apt-get install -y --no-install-recommends /tmp/edge.deb && \
+	rm /tmp/edge.deb && \
+	microsoft-edge --version
 
 # Set environment variables
 ENV PATH="/home/user/.local/bin:/home/user/app/venv/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:${PATH}"
@@ -89,7 +89,7 @@ ENV PLAYWRIGHT_BROWSERS_PATH=$HOME/app/browsers
 ENV CHROME_BIN=/usr/bin/google-chrome
 ENV CHROME_PATH=/usr/lib/google-chrome/
 ENV EDGE_BIN=/usr/bin/microsoft-edge
-ENV EDGE_ENABLED=0
+ENV EDGE_ENABLED=true
 
 # Create user if it doesn't exist, or use existing one
 RUN useradd -m -u 1000 user
