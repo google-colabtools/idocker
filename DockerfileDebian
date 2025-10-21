@@ -67,11 +67,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxss1 \
     libxtst6 \
     libdouble-conversion3 \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
     && apt-get install -y nodejs
 
+RUN update-ca-certificates
 #RUN wget -q -O /tmp/chrome.deb ${CHROME_LINK} && \
 #	apt-get install -y --no-install-recommends /tmp/chrome.deb && \
 #	rm /tmp/chrome.deb && \
