@@ -19,4 +19,4 @@ jobs:
         run: docker build -f DockerfileDebian -t ${{ secrets.DOCKER_USERNAME }}/python:latest .
 
       - name: 🚀 Push para o Docker Hub
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/debian:latest
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/python:latest
