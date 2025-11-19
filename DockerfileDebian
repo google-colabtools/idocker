@@ -105,8 +105,8 @@ WORKDIR $HOME/app/$BOT_DIR_NAME
 # Install all dependencies required to build the script
 RUN npm ci --ignore-scripts
 
-# Install Chromium Headless Shell, and cleanup
-RUN npx playwright install --with-deps --only-shell chromium \
+# Install Chromium Headless Shell without deps (we already installed them), and cleanup
+RUN npx playwright install --only-shell chromium \
     && rm -rf /root/.cache /tmp/* /var/tmp/*
 
 RUN npm run build
