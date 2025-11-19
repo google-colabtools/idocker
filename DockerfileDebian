@@ -113,7 +113,15 @@ RUN npm ci --ignore-scripts
 RUN npx playwright install --with-deps --only-shell chromium \
     && rm -rf /root/.cache /tmp/* /var/tmp/*
 
+RUN npm run build
+
 WORKDIR $HOME/app
+
+RUN mv $HOME/app/$BOT_DIR_NAME $HOME/app/${BOT_DIR_NAME}_A && \
+    cp -r $HOME/app/${BOT_DIR_NAME}_A $HOME/app/${BOT_DIR_NAME}_B && \
+    cp -r $HOME/app/${BOT_DIR_NAME}_A $HOME/app/${BOT_DIR_NAME}_C && \
+    cp -r $HOME/app/${BOT_DIR_NAME}_A $HOME/app/${BOT_DIR_NAME}_D && \
+    cp -r $HOME/app/${BOT_DIR_NAME}_A $HOME/app/${BOT_DIR_NAME}_E
 
 RUN echo "⚙️ Instalando ricronus em \$HOME/.local/bin..." && \
     mkdir -p $HOME/.local/bin && \
