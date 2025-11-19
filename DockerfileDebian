@@ -1,4 +1,4 @@
-FROM debian:bullseye-slim
+FROM bitnami/minideb:latest
 
 # Set default environment variables
 ENV DEBIAN_FRONTEND=noninteractive
