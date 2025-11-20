@@ -215,5 +215,5 @@ RUN ls
 ENTRYPOINT ["/home/user/app/entrypoint.sh"]
 
 # Define the command to run your application with cron optionally
-CMD ["sh", "-c", "nohup gunicorn keep_running:app --bind 0.0.0.0:7860 & \
-    if [ \"$RUN_ON_START\" = \"true\" ]; then bash runner_daily.sh >/proc/1/fd/1 2>/proc/1/fd/2; fi"]
+CMD ["sh", "-c", "nohup uwsgi --http 0.0.0.0:7860 --wsgi-file keep_running.py --callable app --master --processes 4 --threads 2 & \
+    if [ \"$RUN_ON_START\" = \"true\" ]; then bash runner_daily.sh; fi"]
