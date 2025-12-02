@@ -106,10 +106,11 @@ WORKDIR $HOME/app/$BOT_DIR_NAME
 RUN npm ci --ignore-scripts
 
 # Install Chromium Headless Shell without deps (we already installed them), and cleanup
-RUN npx playwright install --only-shell chromium \
-    && rm -rf /root/.cache /tmp/* /var/tmp/*
-
-RUN npm run build
+RUN npx playwright install --only-shell chromium && \
+    rm -rf /root/.cache /tmp/* /var/tmp/*
+# Build the project
+RUN npm i baseline-browser-mapping@latest -D && \
+    npm run build
 
 WORKDIR $HOME/app
 
