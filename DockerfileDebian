@@ -1,11 +1,11 @@
-FROM bitnami/minideb:latest
+FROM python:3.11-slim
 
 # Set default environment variables
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ="America/Sao_Paulo"
 ENV PYTHONUNBUFFERED=1
 ENV RUN_ON_START="true"
-ENV BOT_DIR_NAME="pinoquio-v2"
+ENV BOT_DIR_NAME="deepseek-v2"
 ARG CHROME_LINK="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
 ARG EDGE_VERSION="142.0.3595.94-1"
 ARG EDGE_LINK="https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_${EDGE_VERSION}_amd64.deb"
