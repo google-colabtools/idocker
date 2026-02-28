@@ -217,4 +217,4 @@ ENTRYPOINT ["/home/user/app/entrypoint.sh"]
 
 # Define the command to run your application with cron optionally
 CMD ["sh", "-c", "nohup uvicorn asgi:asgi_app --host 0.0.0.0 --port 7860 --workers 4 --log-level warning & \
-    bash runner_daily.sh > /home/user/app/runner.log 2>&1"]
+    bash runner_daily.sh"]
