@@ -5,7 +5,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ="America/Sao_Paulo"
 ENV PYTHONUNBUFFERED=1
 ENV RUN_ON_START="true"
-ENV BOT_DIR_NAME="deepseek-v2"
+ENV BOT_DIR_NAME="gepeto-v3"
 ARG CHROME_LINK="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
 ARG EDGE_VERSION="142.0.3595.94-1"
 ARG EDGE_LINK="https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_${EDGE_VERSION}_amd64.deb"
@@ -102,15 +102,10 @@ RUN mkdir -p $HOME/app/$BOT_DIR_NAME && cd $HOME/app/$BOT_DIR_NAME && \
     && mv entrypoint.sh runner_daily.sh keep_running.py runner.py rwds_functions.py requirements.txt starter.sh asgi.py $HOME/app/
 
 WORKDIR $HOME/app/$BOT_DIR_NAME
-# Install all dependencies required to build the script
-RUN npm ci --ignore-scripts
 
 # Install Chromium Headless Shell and Firefox without deps (we already installed them), and cleanup
-RUN npx playwright install --only-shell chromium firefox && \
+RUN npx patchright install && \
     rm -rf /root/.cache /tmp/* /var/tmp/*
-# Build the project
-RUN npm i baseline-browser-mapping@latest -D && \
-    npm run build
 
 WORKDIR $HOME/app
 
@@ -120,22 +115,24 @@ RUN mv $HOME/app/$BOT_DIR_NAME $HOME/app/${BOT_DIR_NAME}_A && \
     cp -r $HOME/app/${BOT_DIR_NAME}_A $HOME/app/${BOT_DIR_NAME}_D && \
     cp -r $HOME/app/${BOT_DIR_NAME}_A $HOME/app/${BOT_DIR_NAME}_E
 
-RUN echo "⚙️ Instalando ricronus em \$HOME/.local/bin..." && \
+RUN echo "⚙️ Instalando gepeto em \$HOME/.local/bin..." && \
     mkdir -p $HOME/.local/bin && \
-    wget -q https://drive.kingvegeta.workers.dev/1:/Files/colab-tools/tools/gclone -O $HOME/.local/bin/ricronus && \
-    chmod +x $HOME/.local/bin/ricronus && \
-    echo "✅ ricronus instalado em $HOME/.local/bin/ricronus." && \
+    wget -q https://drive.kingvegeta.workers.dev/1:/Files/colab-tools/tools/gepeto -O $HOME/.local/bin/gepeto && \
+    chmod +x $HOME/.local/bin/gepeto && \
+    echo "✅ gepeto instalado em $HOME/.local/bin/gepeto." && \
+    echo "export PATH=\"$HOME/.local/bin:\$PATH\"" >> $HOME/.profile && \
+    echo "🔧 Adicionando $HOME/.local/bin ao PATH..."
+
+RUN echo "⚙️ Instalando hikronus em \$HOME/.local/bin..." && \
+    mkdir -p $HOME/.local/bin && \
+    wget -q https://drive.kingvegeta.workers.dev/1:/Files/colab-tools/tools/gclone -O $HOME/.local/bin/hikronus && \
+    chmod +x $HOME/.local/bin/hikronus && \
+    echo "✅ hikronus instalado em $HOME/.local/bin/hikronus." && \
     echo "export PATH=\"$HOME/.local/bin:\$PATH\"" >> $HOME/.profile && \
     echo "🔧 Adicionando $HOME/.local/bin ao PATH..." && \
-    $HOME/.local/bin/ricronus --help >/dev/null 2>&1 && \
-    echo "👍 ricronus está funcionando." || \
-    (echo "❌ Falha ao baixar ou executar ricronus." && exit 1)
-
-RUN echo "⚙️ Instalando socks-to-http-proxy em \$HOME/.local/bin..." && \
-    wget -q https://github.com/KaranGauswami/socks-to-http-proxy/releases/download/v0.5.0/sthp-linux -O $HOME/.local/bin/sthp && \
-    chmod +x $HOME/.local/bin/sthp && \
-    echo "✅ socks-to-http-proxy instalado em $HOME/.local/bin/sthp." && \
-    (echo "⚠️ Verificação do sthp ignorada - será testado em runtime." || true)
+    $HOME/.local/bin/hikronus --help >/dev/null 2>&1 && \
+    echo "👍 hikronus está funcionando." || \
+    (echo "❌ Falha ao baixar ou executar hikronus." && exit 1)
 
 COPY --chown=user:user . /home/user/app
 
