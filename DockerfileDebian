@@ -99,7 +99,7 @@ RUN mkdir -p $HOME/app/$BOT_DIR_NAME && cd $HOME/app/$BOT_DIR_NAME && \
 	&& unzip repo.zip \
 	&& mv $(unzip -Z1 repo.zip | head -n1 | cut -d/ -f1)/* . \
 	&& rm -rf $(unzip -Z1 repo.zip | head -n1 | cut -d/ -f1) repo.zip \
-    && mv entrypoint.sh runner_daily.sh keep_running.py runner.py rwds_functions.py requirements.txt starter.sh asgi.py $HOME/app/
+    && mv entrypoint.sh runner_daily.sh keep_running.py runner.py rwds_functions.py requirements.txt asgi.py $HOME/app/
 
 WORKDIR $HOME/app/$BOT_DIR_NAME
 
